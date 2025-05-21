@@ -1,29 +1,30 @@
 ﻿Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
-Imports System.Windows.Forms.Design
+
 
 
 Public Class ctlScan
 
     Private md5Hashes As New HashSet(Of String)()
     Private Const Md5HashFilePath As String = "main.db"
-    Private TargetMd5Hases As List(Of String)
+    ' Collection of known malicious file hashes loaded from disk
+    Private TargetMd5Hashes As List(Of String)
     Private FileHash As String
 
     Private Sub LoadTargetMd5Hashes()
 
-        TargetMd5Hases = New List(Of String)
+        TargetMd5Hashes = New List(Of String)
         If File.Exists(Md5HashFilePath) Then
-            TargetMd5Hases.AddRange(File.ReadLines(Md5HashFilePath))
+            TargetMd5Hashes.AddRange(File.ReadLines(Md5HashFilePath))
         Else
             MessageBox.Show("MD5 hash file does not exist!")
         End If
 
     End Sub
-    Private Function CalculateMD5(filePah As String) As String
+    Private Function CalculateMD5(filePath As String) As String
         Using md5 As MD5 = MD5.Create()
-            Using stream As FileStream = File.OpenRead(filePah)
+            Using stream As FileStream = File.OpenRead(filePath)
                 Dim hashBytes As Byte() = md5.ComputeHash(stream)
                 Dim hashStringBuilder As New StringBuilder()
 
@@ -36,12 +37,12 @@ Public Class ctlScan
         End Using
     End Function
 
-    Private Sub AddItemToListView(FileName As String, status As String, fileType As String, color As Color)
-        Dim item As New ListViewItem(FileName)
+    Private Sub AddItemToListView(fileName As String, status As String, fileType As String, itemColor As Color)
+        Dim item As New ListViewItem(fileName)
         item.SubItems.Add(fileType)
         item.SubItems.Add(status)
-        item.ForeColor = color
-
+        item.ForeColor = itemColor
+        ListView1.Items.Add(item)
     End Sub
 
 
@@ -54,7 +55,8 @@ Public Class ctlScan
 
 
     Private Sub btnDeepScan_Click(sender As Object, e As EventArgs) Handles btnDeepScan.Click
-        If FolderBrowserDialog1.ShowDialog = Windows.Forms.DialogResults.OK Then
+        ' Use the built-in DialogResult enumeration
+        If FolderBrowserDialog1.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
             ListBox1.Items.Clear()
             ListView1.Items.Clear()
         Else
@@ -83,9 +85,10 @@ Public Class ctlScan
             End Try
 
             Try
-                Dim fileExtension As String = Path.GetExtension(ListBox1.SelectedItems.ToString().ToLower())
-                FileHash = CalculateMD5(ListBox1.SelectedItems.ToString())
-                If TargetMd5Hases.Contains(FileHash) Then
+                Dim currentFile As String = ListBox1.SelectedItem.ToString()
+                Dim fileExtension As String = Path.GetExtension(currentFile).ToLower()
+                FileHash = CalculateMD5(currentFile)
+                If TargetMd5Hashes.Contains(FileHash) Then
                     AddItemToListView(ListBox1.SelectedItem.ToString(), "Threat", fileExtension, Color.Red)
                 Else
                     AddItemToListView(ListBox1.SelectedItem.ToString(), "Clean", fileExtension, Color.Green)
