@@ -8,6 +8,6 @@
     End Sub
 
     Private Sub ctlProtection_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        AllFunctions.ApplyTheme(Me)
     End Sub
 End Class

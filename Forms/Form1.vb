@@ -33,5 +33,10 @@
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         frmColse.ShowDialog()
     End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        AllFunctions.ApplyTheme(Me)
+        AllFunctions.HomeBotton()
+    End Sub
 End Class
 

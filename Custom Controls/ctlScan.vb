@@ -103,4 +103,8 @@ Public Class ctlScan
             ProgressBar2.Value = 0
         End If
     End Sub
+
+    Private Sub ctlScan_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        AllFunctions.ApplyTheme(Me)
+    End Sub
 End Class

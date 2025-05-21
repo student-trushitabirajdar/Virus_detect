@@ -2,12 +2,39 @@
 
 Public Class AllFunctions
 
-    Public Shared basecolor = Color.FromArgb(28, 114, 157)
-    Public Shared buttoncolor = Color.FromArgb(102, 50, 173)
+    ' Base color applied to panels and inactive buttons
+    Public Shared basecolor As Color = Color.FromArgb(45, 45, 48)
+    ' Accent color used for the selected navigation button
+    Public Shared buttoncolor As Color = Color.FromArgb(0, 120, 215)
+    ' Standard text colour used across the UI
+    Public Shared textcolor As Color = Color.White
 
     Public Const WM_NCLBUTTONDOWN As Integer = &HA1
     Public Const HT_CAPTION As Integer = &H2
 
+    ' Apply theme colours to the supplied control and its children
+    Public Shared Sub ApplyTheme(parent As Control)
+        parent.BackColor = basecolor
+        ApplyThemeRecursive(parent)
+    End Sub
+
+    Private Shared Sub ApplyThemeRecursive(ctrl As Control)
+        For Each child As Control In ctrl.Controls
+            If TypeOf child Is Button Then
+                child.BackColor = basecolor
+                child.ForeColor = textcolor
+                CType(child, Button).FlatStyle = FlatStyle.Popup
+            ElseIf TypeOf child Is Panel Then
+                child.BackColor = basecolor
+            ElseIf TypeOf child Is Label Then
+                child.ForeColor = textcolor
+            End If
+
+            If child.HasChildren Then
+                ApplyThemeRecursive(child)
+            End If
+        Next
+    End Sub
 
 
 
