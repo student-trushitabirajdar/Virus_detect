@@ -13,7 +13,8 @@
     End Sub
 
     Private Sub frmColse_MouseDown(sender As Object, e As MouseEventArgs) Handles Me.MouseDown, Panel1.MouseDown
-        If e.Button = Windows.Forms.MouseButtons.Left Then
+        ' Use the System.Windows.Forms enumeration for the mouse button check
+        If e.Button = System.Windows.Forms.MouseButtons.Left Then
             AllFunctions.ReleaseCapture()
             AllFunctions.SendMessage(Handle, AllFunctions.WM_NCLBUTTONDOWN, AllFunctions.HT_CAPTION, 0)
         End If

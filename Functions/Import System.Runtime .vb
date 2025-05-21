@@ -1,9 +1,10 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Drawing
 
 Public Class AllFunctions
-
-    Public Shared basecolor = Color.FromArgb(28, 114, 157)
-    Public Shared buttoncolor = Color.FromArgb(102, 50, 173)
+    
+    Public Shared basecolor As Color = Color.FromArgb(28, 114, 157)
+    Public Shared buttoncolor As Color = Color.FromArgb(102, 50, 173)
 
     Public Const WM_NCLBUTTONDOWN As Integer = &HA1
     Public Const HT_CAPTION As Integer = &H2
